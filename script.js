@@ -41,5 +41,29 @@ function hidden() {
     document.getElementsByClassName("book-form")[0].classList.toggle('hidden')
 }
 
-const New_Book = document.querySelector(".new-book")
-New_Book.addEventListener('click', hidden)
+const new_Book = document.querySelector(".new-book")
+new_Book.addEventListener('click', hidden)
+
+function createBook(){
+    newBook = new Book(document.getElementById('title').value,
+                    document.getElementById('author').value,
+                    document.getElementById('pages').value,
+                    document.getElementById('read').checked)
+    
+    addBookToLibrary(newBook)
+    displayBook(newBook)
+}
+function clearForm(){
+    inputs = document.getElementsByTagName('input')
+    
+    for(input of inputs) {
+        input.value = ''
+    }
+}
+
+const create_Book = document.querySelector(".create-book")
+create_Book.addEventListener('click', event => {
+    event.preventDefault()
+    createBook() 
+    clearForm()
+})
