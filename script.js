@@ -29,20 +29,17 @@ function displayBook (book) {
     const delete_Button = document.createElement('button')
     div.appendChild(delete_Button)
     delete_Button.textContent = 'delete book'
-    delete_Button.classList.add('delete-book')
+    delete_Button.classList.add('delete-book') //added class so we can get list of all delete buttons
     delete_Button.setAttribute('data-index', Library.indexOf(book)) // Link Dom element and book obj in Library, Every button now will have an index of the book object it is related to
     delete_Button.addEventListener('click',deleteBook)
+
+    const toggle_Button = document.createElement('button')
+    div.appendChild(toggle_Button)
+    toggle_Button.textContent = 'toggle-read'
+    toggle_Button.classList.add('toggle-book')
+    toggle_Button.setAttribute('data-index', Library.indexOf(book)) // isko bhi diya data attr cause we want to use get attr for this button's click event
+    toggle_Button.addEventListener('click', changeRead)
 }
-
-// const book1 = new Book('Star Wars', 'George Lucas', 345, true)
-// const book2 = new Book('Laura: The Adventure', 'Läusel Keil', 35, false)
-// const book3 = new Book('Apfel essen leicht gemacht', 'Läusel Keilo', 5601, false)
-
-// addBookToLibrary(book1)
-// addBookToLibrary(book2)
-// addBookToLibrary(book3)
-
-// displayLibrary()
 
 function hidden() {
     document.getElementsByClassName("book-form")[0].classList.toggle('hidden')
@@ -83,9 +80,25 @@ function deleteBook(event) {
 }
 
 function adjustDataIndex(){
-    const btns = document.getElementsByClassName('delete-book')
-    for (let i = 0; i < btns.length; i++) {
-        const element = btns[i];
-        element.setAttribute('data-index', i) // adjust data attribute according to the state of Library array. Sync attr and actual array index
+    const delete_btns = document.getElementsByClassName('delete-book')
+    const toggle_btns = document.getElementsByClassName('toggle-book')
+    for (let i = 0; i < delete_btns.length; i++) {
+        delete_btns[i].setAttribute('data-index', i) // adjust data attribute according to the state of Library array. Sync attr and actual array index
+        toggle_btns[i].setAttribute('data-index', i) // doing the same sync, like for delete button
+    }
+
+}
+
+function changeRead(event) {
+    const index = event.target.getAttribute('data-index')
+    const book = Library[index]
+    book.toggleRead()
+}
+
+Book.prototype.toggleRead = function() {
+    if (this.read == true) {
+        this.read = false
+    } else {
+        this.read = true
     }
 }
