@@ -29,6 +29,7 @@ function displayBook (book) {
     const delete_Button = document.createElement('button')
     div.appendChild(delete_Button)
     delete_Button.textContent = 'delete book'
+    delete_Button.classList.add('delete-book')
     delete_Button.setAttribute('data-index', Library.indexOf(book)) // Link Dom element and book obj in Library, Every button now will have an index of the book object it is related to
     delete_Button.addEventListener('click',deleteBook)
 }
@@ -78,4 +79,13 @@ function deleteBook(event) {
     const index = event.target.getAttribute('data-index')
     Library.splice(index, 1)
     event.target.parentNode.remove() // because button is inside the book div
+    adjustDataIndex()
+}
+
+function adjustDataIndex(){
+    const btns = document.getElementsByClassName('delete-book')
+    for (let i = 0; i < btns.length; i++) {
+        const element = btns[i];
+        element.setAttribute('data-index', i) // adjust data attribute according to the state of Library array. Sync attr and actual array index
+    }
 }
