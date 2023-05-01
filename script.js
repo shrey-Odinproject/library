@@ -25,6 +25,12 @@ function displayBook (book) {
     let div = document.getElementsByClassName('library')[0].appendChild(document.createElement('div'))
     div.classList.add('book')
     div.innerHTML = book.info()
+    
+    const delete_Button = document.createElement('button')
+    div.appendChild(delete_Button)
+    delete_Button.textContent = 'delete book'
+    delete_Button.setAttribute('data-index', Library.indexOf(book)) // Link Dom element and book obj in Library, Every button now will have an index of the book object it is related to
+    delete_Button.addEventListener('click',deleteBook)
 }
 
 // const book1 = new Book('Star Wars', 'George Lucas', 345, true)
@@ -67,3 +73,9 @@ create_Book.addEventListener('click', event => {
     createBook() 
     clearForm()
 })
+
+function deleteBook(event) {
+    const index = event.target.getAttribute('data-index')
+    Library.splice(index, 1)
+    event.target.parentNode.remove() // because button is inside the book div
+}
