@@ -7,7 +7,7 @@ function Book(title, author, pgnum, read = false) {
     this.read = read
 
     this.info = function () {
-        return `${title} by ${author} has ${pgnum} pages and is ${read}`
+        return `${title} by ${author} has ${pgnum}`
     }
 }
 
@@ -35,7 +35,7 @@ function displayBook (book) {
 
     const toggle_Button = document.createElement('button')
     div.appendChild(toggle_Button)
-    toggle_Button.textContent = 'toggle-read'
+    toggle_Button.textContent = displayReadStatus(book)
     toggle_Button.classList.add('toggle-book')
     toggle_Button.setAttribute('data-index', Library.indexOf(book)) // isko bhi diya data attr cause we want to use get attr for this button's click event
     toggle_Button.addEventListener('click', changeRead)
@@ -93,6 +93,7 @@ function changeRead(event) {
     const index = event.target.getAttribute('data-index')
     const book = Library[index]
     book.toggleRead()
+    event.target.textContent= displayReadStatus(book)
 }
 
 Book.prototype.toggleRead = function() {
@@ -100,5 +101,13 @@ Book.prototype.toggleRead = function() {
         this.read = false
     } else {
         this.read = true
+    }
+}
+
+function displayReadStatus(book) {
+    if (book.read === true) {
+        return 'book is read'
+    } else {
+        return 'book is not read'
     }
 }
