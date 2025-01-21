@@ -1,25 +1,49 @@
-let Library = [];
-
-function Book(title, author, pgnum, read = false) {
+class Book {
+    constructor (title, author, pgnum, read = false){
     this.title = title
     this.author = author
     this.pgnum = pgnum
     this.read = read
+    }
+    
+    info() {
+        return `${this.title} by ${this.author} has ${this.pgnum}`
+    }
 
-    this.info = function () {
-        return `${title} by ${author} has ${pgnum}`
+    toggleRead() {
+        if (this.read == true) {
+            this.read = false
+        } else {
+            this.read = true
+        }
     }
 }
 
-function addBookToLibrary(book) {
-    Library.push(book)
-}
+class Library{
+    constructor (){
+        this.books= [];
+    }
 
-function displayLibrary () {
-    for (book of Library) {
-        displayBook (book)
+    getBook(index){
+        return this.books[index]
+    }
+
+    addBookToLibrary(book) {
+        this.books.push(book)
+    }
+
+    displayLibrary () {
+        for (book of this.books) {
+            displayBook (book)
+        }
+    }
+
+    removeBook(index){
+        this.books.splice(index,1)
     }
 }
+
+const library = new Library()
 
 function displayBook (book) {
     let div = document.getElementsByClassName('library')[0].appendChild(document.createElement('div'))
@@ -30,14 +54,14 @@ function displayBook (book) {
     div.appendChild(delete_Button)
     delete_Button.textContent = 'delete book'
     delete_Button.classList.add('delete-book') //added class so we can get list of all delete buttons
-    delete_Button.setAttribute('data-index', Library.indexOf(book)) // Link Dom element and book obj in Library, Every button now will have an index of the book object it is related to
+    delete_Button.setAttribute('data-index', library.books.indexOf(book)) // Link Dom element and book obj in Library, Every button now will have an index of the book object it is related to
     delete_Button.addEventListener('click',deleteBook)
 
     const toggle_Button = document.createElement('button')
     div.appendChild(toggle_Button)
     toggle_Button.textContent = displayReadStatus(book)
     toggle_Button.classList.add('toggle-book')
-    toggle_Button.setAttribute('data-index', Library.indexOf(book)) // isko bhi diya data attr cause we want to use get attr for this button's click event
+    toggle_Button.setAttribute('data-index', library.books.indexOf(book)) // isko bhi diya data attr cause we want to use get attr for this button's click event
     toggle_Button.addEventListener('click', changeRead)
 }
 
@@ -54,7 +78,7 @@ function createBook(){
                     document.getElementById('pages').value,
                     document.getElementById('read').checked)
     
-    addBookToLibrary(newBook)
+    library.addBookToLibrary(newBook)
     displayBook(newBook)
 }
 function clearForm(){
@@ -74,7 +98,7 @@ create_Book.addEventListener('click', event => {
 
 function deleteBook(event) {
     const index = event.target.getAttribute('data-index')
-    Library.splice(index, 1)
+    library.removeBook(index)
     event.target.parentNode.remove() // because button is inside the book div
     adjustDataIndex()
 }
@@ -91,17 +115,9 @@ function adjustDataIndex(){
 
 function changeRead(event) {
     const index = event.target.getAttribute('data-index')
-    const book = Library[index]
+    const book = library.getBook(index)
     book.toggleRead()
     event.target.textContent= displayReadStatus(book)
-}
-
-Book.prototype.toggleRead = function() {
-    if (this.read == true) {
-        this.read = false
-    } else {
-        this.read = true
-    }
 }
 
 function displayReadStatus(book) {
